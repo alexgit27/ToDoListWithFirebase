@@ -8,24 +8,25 @@
 import UIKit
 import Firebase
 
-class TableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class TableViewController: UIViewController {
     var user: CustomUser!
     var ref: DatabaseReference!
     var tasks = Array<Task>()
     
-
     @IBOutlet weak var table: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         guard let currentUser = Auth.auth().currentUser else { return }
         user = CustomUser(user: currentUser)
-         ref = Database.database().reference(withPath: "users").child(String(user.uid)).child("tasks")
+        ref = Database.database().reference(withPath: "users").child(String(user.uid)).child("tasks")
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        // Load the task if the user is logged in
         ref.observe(.value, with: {[weak self] (snapshot) in
             var _tasks = Array<Task>()
             for item in snapshot.children {
@@ -42,6 +43,35 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         ref.removeAllObservers()
     }
+    
+    // MARK: IBAction's
+    @IBAction func addTapped(_ sender: UIBarButtonItem) {
+        let alertController = UIAlertController(title: "New Task", message: "Add new task", preferredStyle: .alert)
+        let save = UIAlertAction(title: "Save", style: .default) {[weak self] _ in
+            guard let textField = alertController.textFields?[0], textField.text != " " else { return }
+            let task = Task(title: textField.text!, userId: (self?.user.uid)!)
+            let taskRef = self?.ref.child(task.title.lowercased())
+            taskRef?.setValue(task.convertToDictionary())
+        }
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addTextField()
+        alertController.addAction(save)
+        alertController.addAction(cancel)
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    @IBAction func signouTapped(_ sender: UIBarButtonItem) {
+        do {
+            try Auth.auth().signOut()
+        } catch {
+            print(error.localizedDescription)
+        }
+        dismiss(animated: true, completion: nil)
+    }
+}
+// MARK: - TableView DataSource, Delegate
+extension TableViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tasks.count
@@ -79,34 +109,5 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func toggleCompletede(_ cell: UITableViewCell, isCompleted: Bool) {
         cell.accessoryType = isCompleted ? .checkmark : .none
-    }
-    
-    @IBAction func addTapped(_ sender: UIBarButtonItem) {
-        let alertController = UIAlertController(title: "New Task", message: "Add new task", preferredStyle: .alert)
-        let save = UIAlertAction(title: "Save", style: .default) {[weak self] _ in
-            guard let textField = alertController.textFields?[0], textField.text != " " else { return }
-            let task = Task(title: textField.text!, userId: (self?.user.uid)!)
-//            let task = Task(title: textField.text!, userId: String("4qWPt6wfUPSo6lp4nxqYuhtBXV83"))
-            let taskRef = self?.ref.child(task.title.lowercased())
-//            let taskRef = self?.ref.child("ittasktitle")
-            taskRef?.setValue(task.convertToDictionary())
-//            taskRef?.setValue(["title": task.title, "userId": task.userId, "completed": task.completed])
-//            taskRef?.setValue(["title": task.title])
-        }
-        
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alertController.addTextField()
-        alertController.addAction(save)
-        alertController.addAction(cancel)
-        present(alertController, animated: true, completion: nil)
-    }
-    
-    @IBAction func signouTapped(_ sender: UIBarButtonItem) {
-        do {
-            try Auth.auth().signOut()
-        } catch {
-            print(error.localizedDescription)
-        }
-        dismiss(animated: true, completion: nil)
     }
 }

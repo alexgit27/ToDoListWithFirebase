@@ -9,7 +9,8 @@ import UIKit
 import Firebase
 
 class ViewController: UIViewController {
-    var ref: DatabaseReference!
+    
+    var reference: DatabaseReference!
     
     @IBOutlet weak var warnLabel: UILabel!
     @IBOutlet weak var loginTF: UITextField!
@@ -18,18 +19,19 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        ref = Database.database().reference(withPath: "users")
-        
-        warnLabel.alpha = 0
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(kbDidShow), name: UIResponder.keyboardDidShowNotification, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(kbDidHide), name: UIResponder.keyboardDidHideNotification, object: nil)
+        // Reference to database
+        reference = Database.database().reference(withPath: "users")
         
         Auth.auth().addStateDidChangeListener {[weak self] auth, user in
             if user != nil {
                 self?.performSegue(withIdentifier: "showVC", sender: self) }
         }
+        
+        warnLabel.alpha = 0
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(kbDidShow), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(kbDidHide), name: UIResponder.keyboardDidHideNotification, object: nil)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -39,6 +41,18 @@ class ViewController: UIViewController {
         passwordTF.text = ""
     }
     
+    // Show message if user don't exist
+    func displayWarning(text: String) {
+        warnLabel.text = text
+        
+        UIView.animate(withDuration: 3, delay: 0, options: .curveEaseInOut,animations: { [weak self] in
+            self?.warnLabel.alpha = 1
+        }) { [weak self] complete in
+            self?.warnLabel.alpha = 0
+        }
+    }
+    
+    // Handling keyboard appearance
     @objc func kbDidShow(notification: Notification) {
         guard let userInfo = notification.userInfo else { return }
         let kbFrameSize = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
@@ -51,16 +65,7 @@ class ViewController: UIViewController {
         (self.view as! UIScrollView).contentSize = CGSize(width: self.view.bounds.size.width, height: self.view.bounds.size.height)
     }
     
-    func displayWarning(text: String) {
-        warnLabel.text = text
-        
-        UIView.animate(withDuration: 3, delay: 0, options: .curveEaseInOut,animations: { [weak self] in
-            self?.warnLabel.alpha = 1
-        }) { [weak self] complete in
-            self?.warnLabel.alpha = 0
-        }
-    }
-    
+    // MARK: IBAction's
     @IBAction func loginPressed(_ sender: UIButton) {
         guard let email = loginTF.text, let password = passwordTF.text, email != " ", password != " " else {
             displayWarning(text: "Info is incorrect")
@@ -90,20 +95,9 @@ class ViewController: UIViewController {
                 print(error!.localizedDescription)
                 return
             }
-            let userRef = self?.ref.child((user?.user.uid)!)
+            let userRef = self?.reference.child((user?.user.uid)!)
             userRef?.setValue(["email": user?.user.email])
-//            if error == nil {
-//                if user != nil {
-////                    self?.performSegue(withIdentifier: "showVC", sender: self)
-//                } else {
-//                    print("user is not created")
-//                }
-//            } else {
-//                self?.displayWarning(text: "Info is incorrect")
-//                print(error?.localizedDescription)
-//            }
         }
     }
-    
 }
 
