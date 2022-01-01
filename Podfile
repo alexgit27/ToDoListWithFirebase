@@ -7,5 +7,7 @@ target 'ToDoFire' do
   pod 'FirebaseCore'
   pod 'Firebase/Auth'
   pod 'Firebase/Database'
+  pod 'Firebase/Auth'
+  pod 'GoogleSignIn'
 
 end

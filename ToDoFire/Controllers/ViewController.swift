@@ -7,6 +7,9 @@
 
 import UIKit
 import Firebase
+import GoogleSignIn
+
+//Git
 
 class ViewController: UIViewController {
     
@@ -39,6 +42,7 @@ class ViewController: UIViewController {
         
         loginTF.text = ""
         passwordTF.text = ""
+		
     }
     
     // Show message if user don't exist

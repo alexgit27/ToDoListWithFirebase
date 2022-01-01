@@ -38,6 +38,7 @@
 		A8E4A47C260A15F500BEE94A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A8E4A49F260A3CCD00BEE94A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		A8E4A4A2260A3CD600BEE94A /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
+		A8FE4C5126B583F4006433D7 /* ToDoFire.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ToDoFire.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +92,7 @@
 		A85868B3260A0EBA003F6AFC /* ToDoFire */ = {
 			isa = PBXGroup;
 			children = (
+				A8FE4C5126B583F4006433D7 /* ToDoFire.entitlements */,
 				A85868C2260A0EBB003F6AFC /* Info.plist */,
 				A8E4A47C260A15F500BEE94A /* GoogleService-Info.plist */,
 				A8E4A49E260A3CBA00BEE94A /* Models */,
@@ -141,6 +143,7 @@
 				A85868AD260A0EBA003F6AFC /* Sources */,
 				A85868AE260A0EBA003F6AFC /* Frameworks */,
 				A85868AF260A0EBA003F6AFC /* Resources */,
+				113BB0DF740DBD483F85D2F3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -199,6 +202,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		113BB0DF740DBD483F85D2F3 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ToDoFire/Pods-ToDoFire-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ToDoFire/Pods-ToDoFire-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ToDoFire/Pods-ToDoFire-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		CCB1712B0F63512D89AD403E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -381,6 +401,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ToDoFire/ToDoFire.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = ToDoFire/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -400,6 +421,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ToDoFire/ToDoFire.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = ToDoFire/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
